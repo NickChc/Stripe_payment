@@ -81,6 +81,7 @@ app.post(
 
     if (event.type === "checkout.session.completed") {
       console.log("AEEE");
+      console.log(session);
       const session = event.data.object;
       console.log("payment was successful:", session);
 
