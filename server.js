@@ -29,7 +29,7 @@ app.use(
 app.post("/create-checkout-session", async (req, res) => {
   try {
     const response = await axios.get(
-      "https://final-api-01iz.onrender.com/product?pageSize=100"
+      `${process.env.BACKEND_URL}/product?pageSize=100`
     );
     const products = response.data.products;
 
