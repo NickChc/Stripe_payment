@@ -5,6 +5,7 @@ const app = express();
 const cors = require("cors");
 const axios = require("axios");
 const stripe = require("stripe")(process.env.STRIPE_PRIVATE_KEY);
+const bodyParser = require("body-parser");
 
 app.use(express.json());
 app.use(
@@ -15,6 +16,13 @@ app.use(
       "https://final-api-01iz.onrender.com",
       "https://form-n-auth.onrender.com",
     ],
+  })
+);
+app.use(
+  bodyParser.json({
+    verify: (req, res, buf) => {
+      req.rawBody = buf;
+    },
   })
 );
 
@@ -53,7 +61,34 @@ app.post("/create-checkout-session", async (req, res) => {
   }
 });
 
+app.post(
+  "/webhooks",
+  bodyParser.raw({ type: "application/json" }),
+  async (req, res) => {
+    const sig = req.headers["stripe-signature"];
+    let event;
 
+    try {
+      event = stripe.webhooks.constructEvent(
+        req.body,
+        sig,
+        process.env.STRIPE_WEBHOOK_SECRET
+      );
+    } catch (error) {
+      console.error("Webhook Error: " + error.message);
+      return res.status(400).send(`Webhook error ${error.message}`);
+    }
 
+    if (event.type === "checkout.session.completed") {
+      console.log("AEEE");
+      const session = event.data.object;
+      console.log("payment was successful:", session);
+
+      res
+        .status(200)
+        .json({ success: true, paymentId: session.payment_intent });
+    }
+  }
+);
 
 app.listen(5000);
