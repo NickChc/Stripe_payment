@@ -15,6 +15,7 @@ app.use(
       "http://localhost:3000",
       "https://final-api-01iz.onrender.com",
       "https://form-n-auth.onrender.com",
+      "https://e-commerce-final-a12i.onrender.com",
     ],
   })
 );
@@ -53,7 +54,7 @@ app.post("/create-checkout-session", async (req, res) => {
         };
       }),
       success_url: `${process.env.CLIENT_URL}/payment-success`,
-      cancel_url: `${process.env.CLIENT_URL}/page_/1`,
+      cancel_url: `${process.env.CLIENT_URL}/`,
     });
     res.json({ url: session.url });
   } catch (e) {
@@ -83,7 +84,6 @@ app.post(
       console.log("AEEE");
       console.log(session);
       const session = event.data.object;
-      console.log("payment was successful:", session);
 
       res
         .status(200)
