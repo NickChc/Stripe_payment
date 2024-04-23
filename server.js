@@ -16,6 +16,7 @@ app.use(
       "https://final-api-01iz.onrender.com",
       "https://form-n-auth.onrender.com",
       "https://e-commerce-final-a12i.onrender.com",
+      "https://old.uptimerobot.com",
     ],
   })
 );
