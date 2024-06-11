@@ -43,13 +43,14 @@ app.post("/create-checkout-session", async (req, res) => {
         if (!item) {
           throw new Error(`Product with ID ${item.id} not found.`);
         }
+        const unitAmount = product?.salePrice || product.price;
         return {
           price_data: {
             currency: "gel",
             product_data: {
               name: product.title,
             },
-            unit_amount: product.price * 100,
+            unit_amount: unitAmount * 100,
           },
           quantity: item.quantity,
         };
